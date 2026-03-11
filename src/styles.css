@@ -1,3 +1,42 @@
-/* You can add global styles to this file, and also import other style files */
+/* ─── 1. PRIMERO: @import externos (regla CSS: siempre antes que todo lo demás) ─── */
 
-@import 'tailwindcss';
+/* display=swap: muestra el texto con fuente del sistema INMEDIATAMENTE
+   mientras carga Playfair/Inter, en lugar de esperar y mostrar texto invisible
+   Esto elimina el CLS (layout shift) causado por las fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* ─── 2. TAILWIND (siempre después de los @import externos) ─── */
+@import "tailwindcss";
+
+/* ─── 3. TOKENS DE DISEÑO: Tailwind los convierte en clases utilitarias ─── */
+@theme {
+  --color-gold:      #c9a84c;
+  --color-gold-light:#e8c87a;
+  --color-dark:      #0a0a0a;
+  --color-surface:   #141414;
+  --color-surface-2: #1e1e1e;
+  --font-heading:    'Playfair Display', serif;
+  --font-body:       'Inter', sans-serif;
+}
+
+/* ─── 4. ESTILOS GLOBALES ─── */
+body {
+  background-color: #0a0a0a;
+  color: #f5f5f5;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Clase utilitaria para headings con Playfair Display */
+.font-heading {
+  font-family: 'Playfair Display', serif;
+}
+
+/* ─── 5. ANIMACIONES ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s ease forwards;
+}

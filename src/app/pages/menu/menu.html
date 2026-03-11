@@ -1,0 +1,97 @@
+<!-- Página completa del menú con tabs de filtro por categoría -->
+
+<!-- HERO DE LA PÁGINA: encabezado con imagen de fondo, más compacto que el hero del home -->
+<div class="relative pt-32 pb-16 bg-zinc-950 overflow-hidden">
+  <!-- Imagen de fondo con baja opacidad para no distraer -->
+  <div
+    class="absolute inset-0 bg-cover bg-center opacity-10"
+    style="background-image: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?fm=webp&w=600&q=80')"
+  ></div>
+  <div class="relative max-w-7xl mx-auto px-6 text-center">
+    <div class="inline-flex items-center gap-3 mb-4">
+      <div class="w-8 h-px bg-amber-500"></div>
+      <p class="text-amber-400 uppercase tracking-[0.3em] text-xs">Bella Vista</p>
+      <div class="w-8 h-px bg-amber-500"></div>
+    </div>
+    <h1 class="font-heading text-5xl sm:text-6xl font-bold text-white mb-4">
+      Nuestro <span class="text-amber-400 italic">Menú</span>
+    </h1>
+    <p class="text-gray-400 max-w-lg mx-auto">
+      Ingredientes frescos, recetas con historia. Cada platillo es una experiencia en sí misma.
+    </p>
+  </div>
+</div>
+
+<!-- SECCIÓN PRINCIPAL DEL MENÚ -->
+<section class="py-16 bg-[#0a0a0a] min-h-screen">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <!-- TABS DE FILTRO POR CATEGORÍA -->
+    <div class="flex flex-wrap gap-3 justify-center mb-14">
+      @for (category of categories; track category) {
+        <button
+          (click)="selectCategory(category)"
+          [class]="category === selectedCategory()
+            ? 'bg-amber-500 text-black font-bold'
+            : 'bg-zinc-900 text-gray-400 hover:text-white border border-zinc-800 hover:border-zinc-600'"
+          class="px-5 py-2 rounded-full text-sm uppercase tracking-wide transition-all duration-200"
+        >
+          {{ category }}
+        </button>
+      }
+    </div>
+
+    <!-- GRID DE PLATILLOS: muestra los platillos de la categoría activa -->
+    <!-- @if con computed(): Angular re-renderiza solo cuando el signal cambia -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (dish of filteredDishes(); track dish.id) {
+        <article class="group flex gap-5 bg-zinc-900 hover:bg-zinc-800/80 border border-zinc-800 hover:border-zinc-700 rounded-2xl p-5 transition-all duration-300">
+
+          <!-- Imagen cuadrada del platillo -->
+          <div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0">
+            <img
+              [src]="dish.imageUrl"
+              [alt]="dish.name"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+
+          <!-- Info del platillo -->
+          <div class="flex flex-col justify-between flex-1 min-w-0">
+            <div>
+              <!-- Encabezado: nombre + badge en la misma línea -->
+              <div class="flex items-start justify-between gap-2 mb-1">
+                <h3 class="font-heading text-white font-semibold leading-tight">
+                  {{ dish.name }}
+                </h3>
+                @if (dish.badge) {
+                  <span class="bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase whitespace-nowrap flex-shrink-0">
+                    {{ dish.badge }}
+                  </span>
+                }
+              </div>
+              <!-- Descripción con truncado a 2 líneas -->
+              <p class="text-gray-500 text-sm leading-relaxed line-clamp-2">
+                {{ dish.description }}
+              </p>
+            </div>
+            <!-- Precio y categoría -->
+            <div class="flex items-center justify-between mt-3">
+              <span class="text-amber-400 font-bold">{{ formatPrice(dish.price) }}</span>
+              <span class="text-zinc-600 text-xs uppercase tracking-wide">{{ dish.category }}</span>
+            </div>
+          </div>
+        </article>
+      }
+    </div>
+
+    <!-- Mensaje si no hay platillos (no debería pasar con los datos actuales) -->
+    @if (filteredDishes().length === 0) {
+      <div class="text-center py-20 text-gray-600">
+        <p class="text-5xl mb-4">🍽️</p>
+        <p>No hay platillos en esta categoría.</p>
+      </div>
+    }
+  </div>
+</section>

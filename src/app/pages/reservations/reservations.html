@@ -1,0 +1,184 @@
+<!-- Página de reservaciones con formulario completo -->
+
+<!-- HERO DE PÁGINA con imagen de fondo -->
+<div class="relative pt-32 pb-16 overflow-hidden">
+  <div
+    class="absolute inset-0 bg-cover bg-center"
+    style="background-image: url('https://images.unsplash.com/photo-1559329007-40df8a9345d8?w=1200&q=80')"
+  >
+    <div class="absolute inset-0 bg-black/75"></div>
+  </div>
+  <div class="relative max-w-7xl mx-auto px-6 text-center">
+    <div class="inline-flex items-center gap-3 mb-4">
+      <div class="w-8 h-px bg-amber-500"></div>
+      <p class="text-amber-400 uppercase tracking-[0.3em] text-xs">Asegura tu mesa</p>
+      <div class="w-8 h-px bg-amber-500"></div>
+    </div>
+    <h1 class="font-heading text-5xl sm:text-6xl font-bold text-white mb-4">
+      Reservar <span class="text-amber-400 italic">Mesa</span>
+    </h1>
+    <p class="text-gray-300 max-w-lg mx-auto">
+      Garantiza tu lugar y cuéntanos la ocasión para preparar algo especial para ti.
+    </p>
+  </div>
+</div>
+
+<section class="py-16 bg-[#0a0a0a]">
+  <div class="max-w-2xl mx-auto px-6">
+
+    <!-- MENSAJE DE CONFIRMACIÓN tras enviar el formulario -->
+    @if (submitted()) {
+      <div class="mb-8 bg-amber-900/20 border border-amber-500/40 text-amber-300 rounded-2xl p-6 text-center">
+        <div class="text-4xl mb-3">🎉</div>
+        <h3 class="font-heading text-xl font-bold mb-2">¡Reservación enviada!</h3>
+        <p class="text-amber-400/80 text-sm">
+          Revisaremos tu solicitud y te confirmaremos por correo dentro de las próximas 2 horas.
+        </p>
+      </div>
+    }
+
+    <!-- FORMULARIO DE RESERVACIÓN -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 sm:p-10">
+      <form (ngSubmit)="onSubmit()" #reservationForm="ngForm" class="space-y-6">
+
+        <!-- Nombre y Teléfono en fila -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-gray-400 text-xs uppercase tracking-wide mb-2" for="res-name">Nombre *</label>
+            <input
+              id="res-name"
+              type="text"
+              [(ngModel)]="form.name"
+              name="name"
+              required
+              placeholder="Tu nombre completo"
+              class="w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none transition-colors text-sm"
+            />
+          </div>
+          <div>
+            <label class="block text-gray-400 text-xs uppercase tracking-wide mb-2" for="res-phone">Teléfono *</label>
+            <input
+              id="res-phone"
+              type="tel"
+              [(ngModel)]="form.phone"
+              name="phone"
+              required
+              placeholder="+506 8888-0000"
+              class="w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none transition-colors text-sm"
+            />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="block text-gray-400 text-xs uppercase tracking-wide mb-2" for="res-email">Correo *</label>
+          <input
+            id="res-email"
+            type="email"
+            [(ngModel)]="form.email"
+            name="email"
+            required
+            placeholder="tu@correo.com"
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none transition-colors text-sm"
+          />
+        </div>
+
+        <!-- Fecha, Hora y Personas en fila de 3 -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div>
+            <label class="block text-gray-400 text-xs uppercase tracking-wide mb-2" for="res-date">Fecha *</label>
+            <input
+              id="res-date"
+              type="date"
+              [(ngModel)]="form.date"
+              name="date"
+              required
+              [min]="minDate"
+              class="w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-4 py-3 text-white outline-none transition-colors text-sm"
+            />
+          </div>
+          <div>
+            <label class="block text-gray-400 text-xs uppercase tracking-wide mb-2" for="res-time">Hora *</label>
+            <select
+              id="res-time"
+              [(ngModel)]="form.time"
+              name="time"
+              required
+              class="w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-4 py-3 text-white outline-none transition-colors text-sm"
+            >
+              <option value="" disabled>Selecciona</option>
+              @for (time of availableTimes; track time) {
+                <option [value]="time">{{ time }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label class="block text-gray-400 text-xs uppercase tracking-wide mb-2" for="res-guests">Personas *</label>
+            <select
+              id="res-guests"
+              [(ngModel)]="form.guests"
+              name="guests"
+              required
+              class="w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-4 py-3 text-white outline-none transition-colors text-sm"
+            >
+              <!-- Genera opciones del 1 al 12 sin repetir HTML -->
+              @for (n of [1,2,3,4,5,6,7,8,9,10,11,12]; track n) {
+                <option [value]="n">{{ n }} {{ n === 1 ? 'persona' : 'personas' }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <!-- Ocasión -->
+        <div>
+          <label class="block text-gray-400 text-xs uppercase tracking-wide mb-2" for="res-occasion">Ocasión</label>
+          <select
+            id="res-occasion"
+            [(ngModel)]="form.occasion"
+            name="occasion"
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-4 py-3 text-white outline-none transition-colors text-sm"
+          >
+            <option value="">Selecciona si aplica</option>
+            @for (occasion of occasions; track occasion) {
+              <option [value]="occasion">{{ occasion }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Notas especiales -->
+        <div>
+          <label class="block text-gray-400 text-xs uppercase tracking-wide mb-2" for="res-notes">
+            Notas especiales
+          </label>
+          <textarea
+            id="res-notes"
+            [(ngModel)]="form.notes"
+            name="notes"
+            rows="3"
+            placeholder="Alergias, preferencias, decoración especial..."
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-amber-500 rounded-xl px-4 py-3 text-white placeholder-gray-600 outline-none transition-colors text-sm resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Botón de envío -->
+        <button
+          type="submit"
+          [disabled]="reservationForm.invalid"
+          class="w-full bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-bold py-4 rounded-xl transition-all duration-200 uppercase tracking-wider flex items-center justify-center gap-2"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+          </svg>
+          Confirmar Reservación
+        </button>
+
+        <!-- Nota informativa debajo del botón -->
+        <p class="text-gray-600 text-xs text-center">
+          Al enviar confirmas que tienes más de 18 años para consumo de bebidas alcohólicas.
+          Cancelaciones con 24h de anticipación.
+        </p>
+      </form>
+    </div>
+  </div>
+</section>
