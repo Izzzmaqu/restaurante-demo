@@ -6,7 +6,23 @@
   <meta name="description" content="Restaurante Bella Vista en Barrio Escalante, San José. Cocina mediterránea con ingredientes frescos. Reserva tu mesa hoy.">
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#c9a84c">
+
+  <!-- Favicon completo -->
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Bella Vista — Restaurante en San José, Costa Rica">
+  <meta property="og:description" content="Cocina mediterránea con ingredientes frescos. Reserva tu mesa hoy.">
+  <meta property="og:image" content="https://restaurante-demo.vercel.app/og-image.jpg">
+  <meta property="og:url" content="https://restaurante-demo.vercel.app">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://restaurante-demo.vercel.app/og-image.jpg">
 
   <!-- Preconnect: abre la conexión DNS antes de que el CSS la necesite -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,5 +40,24 @@
 </head>
 <body>
   <app-root></app-root>
+
+  <!-- Schema.org: Google entiende que es un restaurante -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Bella Vista",
+    "description": "Cocina mediterránea con ingredientes frescos",
+    "url": "https://restaurante-demo.vercel.app",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Barrio Escalante",
+      "addressLocality": "San José",
+      "addressCountry": "CR"
+    },
+    "servesCuisine": "Mediterránea",
+    "priceRange": "$$"
+  }
+  </script>
 </body>
 </html>
